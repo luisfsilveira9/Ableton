@@ -24,10 +24,12 @@ def parse_device(dev_elem):
 
 def parse_devices(parent):
     devices = []
-    devices_container = parent.find('.//Devices')
-    if devices_container is not None:
-        for elem in devices_container.iter():
-            if elem.find('DeviceId') is not None:
+    chain = parent.find('./DeviceChain')
+    if chain is None:
+        return devices
+    for container in chain.findall('.//Devices'):
+        for elem in container:
+            if elem.find('.//DeviceId') is not None and elem.find('.//Manual') is not None:
                 devices.append(parse_device(elem))
     return devices
 
